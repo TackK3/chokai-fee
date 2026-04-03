@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { save, open } from "@tauri-apps/plugin-dialog";
+import { getVersion } from "@tauri-apps/api/app";
 import { Year, District } from "../types";
 import { ConfirmDialog } from "./ConfirmDialog";
 
@@ -39,6 +40,7 @@ export function Sidebar({
   const [newDept, setNewDept] = useState(1);
   const [newDist, setNewDist] = useState(1);
   const [expandedDepts, setExpandedDepts] = useState<Set<number>>(new Set());
+  const [appVersion, setAppVersion] = useState("");
 
   const toggleDept = (dept: number) => {
     setExpandedDepts((prev) => {
@@ -60,6 +62,10 @@ export function Sidebar({
     target: ContextTarget;
   } | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    getVersion().then(setAppVersion);
+  }, []);
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -399,6 +405,11 @@ export function Sidebar({
           onConfirm={confirmDialog.onConfirm}
           onCancel={() => setConfirmDialog(null)}
         />
+      )}
+      {appVersion && (
+        <div className="px-4 py-2 text-xs text-slate-600 border-t border-slate-700">
+          v{appVersion}
+        </div>
       )}
     </aside>
   );
