@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+
+  --color-accent-500: #10b981;
+  --color-accent-600: #059669;
+
+  --color-sidebar: #1e293b;
+  --color-sidebar-hover: #334155;
+  --color-sidebar-active: #475569;
+}
+
+:root {
+  font-family: "Segoe UI", "Meiryo", "Yu Gothic", sans-serif;
+  font-size: 18px;
+  -webkit-font-smoothing: antialiased;
+  color: #1e293b;
+  background: #f8fafc;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.editable-cell {
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  transition: all 0.15s;
+  border: 1.5px solid #e2e8f0;
+  background: #f8fafc;
+}
+.editable-cell:hover {
+  background-color: #eef2ff;
+  border-color: #93c5fd;
+}
+.editable-cell:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: white;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+.editable-cell input {
+  width: 100%;
+  border: 2px solid #3b82f6;
+  border-radius: 4px;
+  padding: 2px 6px;
+  outline: none;
+  font-size: inherit;
+  background: white;
+}
+
+.payment-cell {
+  text-align: center;
+  cursor: pointer;
+  padding: 6px 2px;
+  min-width: 52px;
+  border-radius: 4px;
+  transition: all 0.15s;
+  font-size: 16px;
+  user-select: none;
+}
+.payment-cell:hover {
+  background-color: #dbeafe;
+}
+.payment-cell.paid {
+  color: #059669;
+  font-weight: 600;
+}
+.payment-cell.unpaid {
+  color: #cbd5e1;
+}
+.payment-cell input {
+  width: 50px;
+  text-align: center;
+  border: 2px solid #3b82f6;
+  border-radius: 4px;
+  padding: 2px;
+  outline: none;
+  font-size: 15px;
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
