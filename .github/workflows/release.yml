@@ -20,7 +20,7 @@ jobs:
           node-version: 20
 
       - name: Install Rust stable
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnyk/rust-toolchain@stable
 
       - name: Rust cache
         uses: swatinem/rust-cache@v2
@@ -42,5 +42,37 @@ jobs:
           releaseBody: "町会費徴収名簿 v__VERSION__ をリリースしました。"
           releaseDraft: false
           prerelease: false
-          includeUpdaterJson: true
-          updaterJsonPreferNsis: true
+
+      - name: Generate latest.json
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ github.ref_name }}"
+          VERSION="${TAG#v}"
+
+          # Get the signature content
+          SIG_FILE=$(find src-tauri/target/release/bundle/nsis -name "*.exe.sig" | head -1)
+          SIGNATURE=$(cat "$SIG_FILE")
+
+          # Get the download URL for the exe
+          EXE_NAME=$(basename "$SIG_FILE" .sig)
+          DOWNLOAD_URL="https://github.com/${{ github.repository }}/releases/download/${TAG}/${EXE_NAME}"
+
+          # Create latest.json
+          cat > latest.json << EJSON
+          {
+            "version": "${VERSION}",
+            "notes": "町会費徴収名簿 v${VERSION} をリリースしました。",
+            "pub_date": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "platforms": {
+              "windows-x86_64": {
+                "signature": "${SIGNATURE}",
+                "url": "${DOWNLOAD_URL}"
+              }
+            }
+          }
+          EJSON
+
+          # Upload latest.json to the release
+          gh release upload "${TAG}" latest.json --clobber
