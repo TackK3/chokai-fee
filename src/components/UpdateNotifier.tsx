@@ -21,6 +21,7 @@ export function UpdateNotifier() {
       }
     } catch (e) {
       console.error("Update check failed:", e);
+      setState({ kind: "error", message: e instanceof Error ? e.message : String(e) });
     }
   };
 
@@ -132,7 +133,7 @@ export function UpdateNotifier() {
             <div className="flex-1">
               <p className="text-sm font-semibold text-red-600">更新エラー</p>
               <p className="text-xs text-slate-500 mt-0.5">
-                更新の取得に失敗しました。後でもう一度お試しください。
+                {state.message}
               </p>
             </div>
             <button
