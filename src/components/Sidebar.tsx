@@ -372,7 +372,9 @@ export function Sidebar({
             インポート
           </button>
         </div>
-        <div className="text-xs text-slate-500 text-center">Tack'n K</div>
+        <div className="text-xs text-slate-500 text-center">
+          Tack'n K{appVersion && <span className="ml-2">v{appVersion}</span>}
+        </div>
       </div>
 
       {/* Context Menu */}
@@ -405,11 +407,6 @@ export function Sidebar({
           onConfirm={confirmDialog.onConfirm}
           onCancel={() => setConfirmDialog(null)}
         />
-      )}
-      {appVersion && (
-        <div className="px-4 py-2 text-xs text-slate-600 border-t border-slate-700">
-          v{appVersion}
-        </div>
       )}
     </aside>
   );
