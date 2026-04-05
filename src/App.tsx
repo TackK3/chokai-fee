@@ -47,7 +47,7 @@ function App() {
     setSelectedYear(year);
   };
 
-  const handleDistrictSelect = (district: District) => {
+  const handleDistrictSelect = (district: District | null) => {
     setSelectedDistrict(district);
   };
 

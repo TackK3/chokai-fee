@@ -15,7 +15,7 @@ interface Props {
   districts: District[];
   selectedDistrict: District | null;
   onYearSelect: (year: Year) => void;
-  onDistrictSelect: (district: District) => void;
+  onDistrictSelect: (district: District | null) => void;
   onYearCreated: () => void;
   onYearDeleted: () => void;
   onDistrictChanged: () => void;
@@ -43,6 +43,13 @@ export function Sidebar({
   const [appVersion, setAppVersion] = useState("");
 
   const toggleDept = (dept: number) => {
+    const isClosing = expandedDepts.has(dept);
+    if (isClosing) {
+      const distsInDept = districts.filter((d) => d.department === dept);
+      if (selectedDistrict && distsInDept.some((d) => d.id === selectedDistrict.id)) {
+        onDistrictSelect(null);
+      }
+    }
     setExpandedDepts((prev) => {
       const next = new Set(prev);
       if (next.has(dept)) next.delete(dept);
