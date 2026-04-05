@@ -55,24 +55,25 @@ jobs:
           SIG_FILE=$(find src-tauri/target/release/bundle/nsis -name "*.exe.sig" | head -1)
           SIGNATURE=$(cat "$SIG_FILE")
 
-          # Get the download URL for the exe
+          # Get the download URL for the exe (URL-encode the filename)
           EXE_NAME=$(basename "$SIG_FILE" .sig)
-          DOWNLOAD_URL="https://github.com/${{ github.repository }}/releases/download/${TAG}/${EXE_NAME}"
+          ENCODED_NAME=$(python3 -c "import urllib.parse; print(urllib.parse.quote('${EXE_NAME}'))")
+          DOWNLOAD_URL="https://github.com/${{ github.repository }}/releases/download/${TAG}/${ENCODED_NAME}"
 
           # Create latest.json
-          cat > latest.json << EJSON
-          {
-            "version": "${VERSION}",
-            "notes": "町会費徴収名簿 v${VERSION} をリリースしました。",
-            "pub_date": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "platforms": {
-              "windows-x86_64": {
-                "signature": "${SIGNATURE}",
-                "url": "${DOWNLOAD_URL}"
-              }
-            }
-          }
-          EJSON
+          cat > latest.json <<EOF
+{
+  "version": "${VERSION}",
+  "notes": "町会費徴収名簿 v${VERSION} をリリースしました。",
+  "pub_date": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+  "platforms": {
+    "windows-x86_64": {
+      "signature": "${SIGNATURE}",
+      "url": "${DOWNLOAD_URL}"
+    }
+  }
+}
+EOF
 
           # Upload latest.json to the release
           gh release upload "${TAG}" latest.json --clobber
