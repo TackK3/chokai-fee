@@ -51,13 +51,13 @@ jobs:
           TAG="${{ github.ref_name }}"
           VERSION="${TAG#v}"
 
-          # Get the signature content
-          SIG_FILE=$(find src-tauri/target/release/bundle/nsis -name "*.exe.sig" | head -1)
+          # Get the signature content (use .nsis.zip.sig for updater artifacts)
+          SIG_FILE=$(find src-tauri/target/release/bundle/nsis -name "*.nsis.zip.sig" | head -1)
           SIGNATURE=$(cat "$SIG_FILE")
 
-          # Get the download URL for the exe (URL-encode the filename)
-          EXE_NAME=$(basename "$SIG_FILE" .sig)
-          ENCODED_NAME=$(python3 -c "import urllib.parse; print(urllib.parse.quote('${EXE_NAME}'))")
+          # Get the download URL for the nsis.zip (URL-encode the filename)
+          ZIP_NAME=$(basename "$SIG_FILE" .sig)
+          ENCODED_NAME=$(python3 -c "import urllib.parse; print(urllib.parse.quote('${ZIP_NAME}'))")
           DOWNLOAD_URL="https://github.com/${{ github.repository }}/releases/download/${TAG}/${ENCODED_NAME}"
 
           # Create latest.json
