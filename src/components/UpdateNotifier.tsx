@@ -54,7 +54,8 @@ export function UpdateNotifier() {
 
       setState({ kind: "ready" });
     } catch (e) {
-      const message = e instanceof Error ? e.message : "アップデートに失敗しました";
+      console.error("Update download/install failed:", e);
+      const message = e instanceof Error ? e.message : String(e) || "アップデートに失敗しました";
       setState({ kind: "error", message });
     }
   };
